@@ -14,7 +14,6 @@ class App extends Component {
 
     this.updateFilter = this.updateFilter.bind(this);
     this.updateAPI = this.updateAPI.bind(this);
-    this.renderData = this.renderData.bind(this);
     this.findStoresWithInventory = this.findStoresWithInventory.bind(this);
 
     this.state = {
@@ -84,22 +83,6 @@ class App extends Component {
     })
   }
 
-  renderData() {
-    return this.state.products
-    .map((product) => {
-      return (
-        <BoozeList 
-          id={product.id}
-          img={product.image_thumb_url}
-          name={product.name}
-          package={product.package}
-          buttonText="Find locations for this product"
-          findStoresWithInventory={(e) => this.findStoresWithInventory(e, product)}
-        />
-      );
-    });
-  }
-
   render() {
     return (
       <div className="main-container">
@@ -111,7 +94,16 @@ class App extends Component {
         />
         <div className="map-product-wrapper">
           <div className="product-list-container">
-            {this.renderData()}
+            {this.state.products.map((product) => 
+                <BoozeList 
+                  id={product.id}
+                  img={product.image_thumb_url}
+                  name={product.name}
+                  package={product.package}
+                  buttonText="Find locations for this product"
+                  findStoresWithInventory={(e) => this.findStoresWithInventory(e, product)}
+                />
+            )}
           </div>
           <div className="map-container">
             {this.state.lat && this.state.lng ?
