@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { GoogleApiWrapper, Map, InfoWindow, Marker} from 'google-maps-react';
 
-// const { GOOGLE_API_KEY } = process.env;
+const { REACT_APP_GOOGLE_API_KEY } = process.env;
 
 export class MapContainer extends Component {
   constructor() {
@@ -35,15 +35,10 @@ export class MapContainer extends Component {
   };
 
   render() {
-    const mapStyle = {
-      width: '68%',
-      height: '85vh'
-    }
-
     return ( 
       <Map 
         google = {this.props.google}
-        zoom = {10}
+        zoom = {12}
         initialCenter = {
           {
             lat: this.props.lat,
@@ -55,8 +50,7 @@ export class MapContainer extends Component {
         inventory = {this.props.storeLocations}
         onClick={this.onMapClicked}
         onDragEnd={this.centerMoved}
-        className="inner-google-map"
-        style={mapStyle}
+        zoomControl={false}
       >
 
         {this.props.storeLocations
@@ -76,6 +70,7 @@ export class MapContainer extends Component {
                 city = {store.city}
                 postalCode = {store.postalCode}
                 quantity = {store.quantity}
+                mapTypeControl={false}
               />
             )
           })
@@ -85,10 +80,10 @@ export class MapContainer extends Component {
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}>
             <div>
-              <h1>{this.state.selectedPlace.name}</h1>
-              <h3>{this.state.selectedPlace.addressLineOne}</h3>
-              <h4>{this.state.selectedPlace.city}, {this.state.selectedPlace.postalCode}</h4>
-              <p> Quantity Left: {this.state.selectedPlace.quantity}</p>
+              <h1 className="info-window-name">{this.state.selectedPlace.name}</h1>
+              <h3 className="info-window-address">{this.state.selectedPlace.addressLineOne}</h3>
+              <h4 className="info-window-city">{this.state.selectedPlace.city}, {this.state.selectedPlace.postalCode}</h4>
+              <p className="info-window-quantity"><span> Quantity Left:</span> {this.state.selectedPlace.quantity}</p>
             </div>
         </InfoWindow>
       </Map> 
@@ -98,5 +93,5 @@ export class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyAHLUzB-tEbkZt9PgI0CKWu8AbjjBEW3CQ"
+  apiKey: REACT_APP_GOOGLE_API_KEY
 })(MapContainer)

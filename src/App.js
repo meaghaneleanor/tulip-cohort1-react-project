@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 
 import { fetchLcboEndpoint } from "./api/lcbo.js";
+import { LabelSearch} from "./components/LabelSearch";
+import { BoozeList } from "./components/BoozeList";
 import MapContainer from "./components/MapContainer";
+
 
 import './styles/main.css';
 
@@ -11,7 +14,6 @@ class App extends Component {
 
     this.updateFilter = this.updateFilter.bind(this);
     this.updateAPI = this.updateAPI.bind(this);
-    this.renderData = this.renderData.bind(this);
     this.findStoresWithInventory = this.findStoresWithInventory.bind(this);
 
     this.state = {
@@ -43,6 +45,7 @@ class App extends Component {
   updateAPI() {
     fetchLcboEndpoint("products", {
       q: this.state.filter,
+      per_page: 10,
     //get product data and store in state array
     }).then(data => {
       this.setState({
@@ -51,7 +54,8 @@ class App extends Component {
     });
   }
 
-  findStoresWithInventory(product) {
+  findStoresWithInventory(e, product) {
+    e.preventDefault();
     fetchLcboEndpoint("stores", {
       product_id: product.id,
     }).then(data => {
@@ -79,38 +83,32 @@ class App extends Component {
     })
   }
 
-  renderData() {
-    return this.state.products
-    .map((product) => {
-      return (
-        <a 
-          onClick={((e) => this.findStoresWithInventory(e, product))} 
-          key={product.id} 
-          id={product.id}>
-            <li>{product.name}<span>{product.package}</span></li>
-        </a>
-      );
-    });
-  }
- 
-
   render() {
     return (
       <div className="main-container">
-        <label> Search for alcohol here!</label>
-        <input placeholder="Search products here..." onChange={this.updateFilter}/>
-        <button onClick={this.updateAPI}> Search</button>
-        {this.state.products.length > 0 ? <p>Choose your drink!</p> : null}
+        <LabelSearch 
+          labelTitle="What product are you looking for?"
+          updateFilter={this.updateFilter}
+          updateAPI={this.updateAPI}
+          stuff="Gin, Beer, Wine, etc..."
+        />
         <div className="map-product-wrapper">
           <div className="product-list-container">
-            <ul>
-              {this.renderData()}
-            </ul>
+            {this.state.products.map((product) => 
+                <BoozeList 
+                  id={product.id}
+                  img={product.image_thumb_url}
+                  name={product.name}
+                  package={product.package}
+                  buttonText="Find locations for this product"
+                  findStoresWithInventory={(e) => this.findStoresWithInventory(e, product)}
+                />
+            )}
           </div>
           <div className="map-container">
             {this.state.lat && this.state.lng ?
-              <MapContainer 
-                className=""
+              <MapContainer
+                className="map"
                 google={this.state.google} 
                 storeLocations={this.state.inventory} 
                 lat={this.state.lat} 
