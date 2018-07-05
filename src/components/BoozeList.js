@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 
 export class BoozeList extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
         <div className="product-item" key={this.props.id}>
-            <div class="product-item-image">
+            <div className="product-item-image">
               <img src={this.props.img} alt={this.props.name}/>
             </div>
             <div className="product-item-info">
