@@ -54,6 +54,10 @@ class App extends Component {
     });
   }
 
+  centerMoved(mapProps) {
+    console.log(mapProps);
+  }
+
   findStoresWithInventory(e, product) {
     e.preventDefault();
     fetchLcboEndpoint("stores", {
@@ -96,6 +100,7 @@ class App extends Component {
           <div className="product-list-container">
             {this.state.products.map((product) => 
                 <BoozeList 
+                  key={product.id}
                   id={product.id}
                   img={product.image_thumb_url}
                   name={product.name}
@@ -112,7 +117,9 @@ class App extends Component {
                 google={this.state.google} 
                 storeLocations={this.state.inventory} 
                 lat={this.state.lat} 
-                lng={this.state.lng}/>
+                lng={this.state.lng}
+                onDragend={this.centerMoved}
+              />
               : <p>Loading...</p>
             }
           </div>
