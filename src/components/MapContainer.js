@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { GoogleApiWrapper, Map, InfoWindow, Marker} from 'google-maps-react';
 
+// const { GOOGLE_API_KEY } = process.env;
+
 export class MapContainer extends Component {
   constructor() {
     super();
@@ -11,7 +13,6 @@ export class MapContainer extends Component {
       selectedPlace: {},
     };
   }
-
   
   onMarkerClick = (props, marker, e) =>
     this.setState({
@@ -29,12 +30,16 @@ export class MapContainer extends Component {
     }
   };
 
+  centerMoved(mapProps, map) {
+    console.log(map)
+  };
+
   render() {
     const mapStyle = {
-      width: '100%',
-      height: '50vh',
-      margin: '0 auto'
+      width: '68%',
+      height: '85vh'
     }
+
     return ( 
       <Map 
         google = {this.props.google}
@@ -47,9 +52,11 @@ export class MapContainer extends Component {
           }
         }
         storeLocations = {this.props.inventory}
-        style = {mapStyle}
         inventory = {this.props.storeLocations}
-        onClick={this.onMapClicked} 
+        onClick={this.onMapClicked}
+        onDragEnd={this.centerMoved}
+        className="inner-google-map"
+        style={mapStyle}
       >
 
         {this.props.storeLocations

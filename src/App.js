@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 
 import { fetchLcboEndpoint } from "./api/lcbo.js";
-import MapContainer from "./components/MapContainer"
+import MapContainer from "./components/MapContainer";
+
+import './styles/main.css';
 
 class App extends Component {
   constructor() {
@@ -49,7 +51,7 @@ class App extends Component {
     });
   }
 
-  findStoresWithInventory(e, product) {
+  findStoresWithInventory(product) {
     fetchLcboEndpoint("stores", {
       product_id: product.id,
     }).then(data => {
@@ -71,7 +73,6 @@ class App extends Component {
           ]
         }
       })
-
       this.setState({
         inventory
       })
@@ -95,21 +96,29 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className="main-container">
         <label> Search for alcohol here!</label>
         <input placeholder="Search products here..." onChange={this.updateFilter}/>
         <button onClick={this.updateAPI}> Search</button>
-        <div>
-          {this.state.products.length > 0 ? <p>Choose your drink!</p> : null}
-          <ul>
-            {this.renderData()}
-          </ul>
+        {this.state.products.length > 0 ? <p>Choose your drink!</p> : null}
+        <div className="map-product-wrapper">
+          <div className="product-list-container">
+            <ul>
+              {this.renderData()}
+            </ul>
+          </div>
+          <div className="map-container">
+            {this.state.lat && this.state.lng ?
+              <MapContainer 
+                className=""
+                google={this.state.google} 
+                storeLocations={this.state.inventory} 
+                lat={this.state.lat} 
+                lng={this.state.lng}/>
+              : <p>Loading...</p>
+            }
+          </div>
         </div>
-        {this.state.lat && this.state.lng ?
-          <MapContainer google={this.state.google} storeLocations={this.state.inventory} lat={this.state.lat} lng={this.state.lng}/>
-          : <p>Loading...</p>
-        }
-
       </div>
     );
   }
