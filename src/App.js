@@ -54,15 +54,13 @@ class App extends Component {
     });
   }
 
-  centerMoved(mapProps) {
-    console.log(mapProps);
-  }
-
   findStoresWithInventory(e, product) {
     e.preventDefault();
     fetchLcboEndpoint("stores", {
       product_id: product.id,
+      per_page: 100
     }).then(data => {
+      console.log(data);
       let inventory = [];
       data.result.map((boozeItem) => {
         if (boozeItem.quantity !== 0 ) {
@@ -118,9 +116,9 @@ class App extends Component {
                 storeLocations={this.state.inventory} 
                 lat={this.state.lat} 
                 lng={this.state.lng}
-                onDragend={this.centerMoved}
+                centerMoved={this.centerMoved}
               />
-              : <p>Loading...</p>
+              : <p className="loading">Loading...</p>
             }
           </div>
         </div>

@@ -30,10 +30,6 @@ export class MapContainer extends Component {
     }
   };
 
-  centerMoved(mapProps, map) {
-    console.log(map)
-  };
-
   render() {
     return ( 
       <Map 
@@ -49,7 +45,6 @@ export class MapContainer extends Component {
         storeLocations = {this.props.inventory}
         inventory = {this.props.storeLocations}
         onClick={this.onMapClicked}
-        onDragEnd={this.centerMoved}
         zoomControl={false}
       >
 
