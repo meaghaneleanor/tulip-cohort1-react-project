@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { fetchLcboEndpoint } from "./api/lcbo.js";
+import MapContainer from "./components/MapContainer"
 
 class App extends Component {
   constructor() {
@@ -15,7 +16,20 @@ class App extends Component {
       products: [],
       filter: "",
       inventory: [],
+      lat: "",
+      lng: ""
     }
+  }
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        this.setState({ 
+          lat: position.coords.latitude, 
+          lng: position.coords.longitude
+        });
+      }
+    );
   }
 
   updateFilter(event) {
@@ -39,20 +53,27 @@ class App extends Component {
     fetchLcboEndpoint("stores", {
       product_id: product.id,
     }).then(data => {
-      data.result.map((data) => {
-        if (data.quantity !== 0) {
-          console.log(data)
-          this.setState({
-            inventory: [ ...this.state.inventory,
-              { 
-                id: data.id, 
-                quantity: data.quantity,
-                lat: data.latitude,
-                long: data.longitude,
-              }
-            ]
-          });
+      let inventory = [];
+      data.result.map((boozeItem) => {
+        if (boozeItem.quantity !== 0 ) {
+          return inventory = [
+            ...inventory,
+            {
+              id: boozeItem.id, 
+              quantity: boozeItem.quantity,
+              lat: boozeItem.latitude,
+              long: boozeItem.longitude,
+              name: boozeItem.name,
+              addressLineOne: boozeItem.address_line_1,
+              city: boozeItem.city,
+              postalCode: boozeItem.postal_code,
+            }
+          ]
         }
+      })
+
+      this.setState({
+        inventory
       })
     })
   }
@@ -77,10 +98,18 @@ class App extends Component {
       <div>
         <label> Search for alcohol here!</label>
         <input placeholder="Search products here..." onChange={this.updateFilter}/>
-        <button onClick={this.updateAPI}> Click me!</button>
-        <ul>
-          {this.renderData()}
-        </ul>
+        <button onClick={this.updateAPI}> Search</button>
+        <div>
+          {this.state.products.length > 0 ? <p>Choose your drink!</p> : null}
+          <ul>
+            {this.renderData()}
+          </ul>
+        </div>
+        {this.state.lat && this.state.lng ?
+          <MapContainer google={this.state.google} storeLocations={this.state.inventory} lat={this.state.lat} lng={this.state.lng}/>
+          : <p>Loading...</p>
+        }
+
       </div>
     );
   }
