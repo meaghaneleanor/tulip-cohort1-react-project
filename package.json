@@ -15,5 +15,6 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "now-start": "serve --single ./build"
-  }
+  },
+  "homepage" : "http://meaghaneleanor.github.io/tulip-cohort1-react-project"
 }
