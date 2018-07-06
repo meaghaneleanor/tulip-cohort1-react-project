@@ -34,7 +34,7 @@ export class MapContainer extends Component {
     return ( 
       <Map 
         google = {this.props.google}
-        zoom = {12}
+        zoom = {10}
         initialCenter = {
           {
             lat: this.props.lat,
@@ -45,6 +45,7 @@ export class MapContainer extends Component {
         storeLocations = {this.props.inventory}
         inventory = {this.props.storeLocations}
         onClick={this.onMapClicked}
+        onDragEnd={this.centerMoved}
         zoomControl={false}
       >
 

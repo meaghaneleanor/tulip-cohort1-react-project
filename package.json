@@ -14,7 +14,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-<<<<<<< HEAD
     "now-start": "serve --single ./build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
@@ -22,8 +21,5 @@
   "homepage": "http://meaghaneleanor.github.io/tulip-cohort1-react-project",
   "devDependencies": {
     "gh-pages": "^1.2.0"
-=======
-    "now-start": "serve --single ./build"
->>>>>>> parent of 15acd81... fixing for now deployment
   }
 }

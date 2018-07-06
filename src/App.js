@@ -60,7 +60,6 @@ class App extends Component {
       product_id: product.id,
       per_page: 100
     }).then(data => {
-      console.log(data);
       let inventory = [];
       data.result.map((boozeItem) => {
         if (boozeItem.quantity !== 0 ) {
@@ -116,9 +115,8 @@ class App extends Component {
                 storeLocations={this.state.inventory} 
                 lat={this.state.lat} 
                 lng={this.state.lng}
-                centerMoved={this.centerMoved}
               />
-              : <p className="loading">Loading...</p>
+              : <p>Loading...</p>
             }
           </div>
         </div>
